@@ -8,10 +8,12 @@ class Controller
 public:
 	Controller();
 	void GetBoard();
+	std::vector<std::string> Loading();
 	void run();
 
 private:
-	void Loading();
+	
+	int m_currStage;
 	Board m_level;
 	//std::vector <std::string>;
 };

@@ -19,6 +19,8 @@ void Controller::Loading()
 		// erase the board and then cout;
 		std::cout << "You are the best You beat me" 
 	}
+
+	while()
 }
 //------------------------
 void GetBoard()
