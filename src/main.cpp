@@ -3,5 +3,5 @@
 int main()
 {
     auto controller = Controller();
-    controller.run();
+    controller.startGame();
 }
