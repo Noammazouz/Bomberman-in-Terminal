@@ -11,6 +11,7 @@ class Player
 public:
 	Player() = default;
 	void move();
+	bool isMoveGood() const;
 
 private:
 	Location m_player;

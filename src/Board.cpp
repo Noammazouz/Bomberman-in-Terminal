@@ -36,7 +36,7 @@ void Board::print()
 		std::cout << temp << std::endl;
 }
 //------------------
-Location Board::getLoc(char wanted)
+Location Board::getLoc(char wanted) const
 {
 	for (int row = 0; row < m_board.size(); row++)
 	{

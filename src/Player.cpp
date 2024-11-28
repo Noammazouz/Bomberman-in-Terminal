@@ -1,6 +1,7 @@
 #include "Player.h"
 //#include "StaticObjects.h"
 #include <conio.h>
+#include <string>
 
 
 
@@ -11,7 +12,7 @@ void Player::move()
 	{
 	case SpecialKeys::UP:
 	{
-		if (isMoveGood)
+		if (isMoveGood())
 		{
 			m_player = std::string(space);
 				m_player.col--;
