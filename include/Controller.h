@@ -13,7 +13,7 @@
 class Controller
 {
 public:
-
+	Controller() = default;
 	void runLevel();
 	void startGame();
 	//resetlevel()

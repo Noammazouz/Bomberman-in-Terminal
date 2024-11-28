@@ -13,12 +13,17 @@ public:
 	int Loading(int currStage);
 	void print();
 	Location getLoc(char wanted) const;
+	void updatboard(const Location& prevLoc, const Location& newLoc);
+	bool ismovevalid(const Location& loc, int direction) const;
+	int getSizeOfRow() const;
+	int getSizeOfCol() const;
 	//int GetCell(Location loc);
 
 private:
 	std::vector<std::string> m_board;
-	std::vector<std::string> m_wall;
-	std::vector<std::string> m_rock;
-	char m_door;
-	//int m_currStage = 1;
+	int sizeRow = 0;
+	int sizeCol = 0;
+	//std::vector<std::string> m_wall;
+	//std::vector<std::string> m_rock;
+	
 };

@@ -3,9 +3,6 @@
 #include <string>
 #include <fstream>
 
-
-using std::string;
-
 void Controller::startGame()
 { // to put a while for the level and all the playing
 
@@ -16,8 +13,9 @@ void Controller::startGame()
 			exit(EXIT_SUCCESS);
 		}
 		Location locPlayer = m_board.getLoc('/');
-		Location locGuard = m_board.getLoc('!');
-		Location locDoor = m_board.getLoc('D');
+		m_player.setLoc(locPlayer);
+	//	Location locGuard = m_board.getLoc('!');
+	//	Location locDoor = m_board.getLoc('D');
 		m_board.print();
 		runLevel();
 
@@ -27,7 +25,10 @@ void Controller::startGame()
 //------------------------
 void Controller::runLevel()
 {
-
+	while (1)
+	{
+		m_player.move();
+	}
 }
 //------------------------
 

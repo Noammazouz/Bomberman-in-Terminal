@@ -1,36 +1,55 @@
 #include "Player.h"
-//#include "StaticObjects.h"
+//#include <iostream>
 #include <conio.h>
 #include <string>
 
+Player::Player()
+	: m_updateBoard()
+{
 
+}
 
 void Player::move()
 {
 	auto step = _getch();
-	switch (step)
+	Location prevLoc = m_loc;
+	if (step == Keys::SPECIAL_KEY)
 	{
-	case SpecialKeys::UP:
-	{
-		if (isMoveGood())
+		step = _getch();
+		switch (step)
 		{
-			m_player = std::string(space);
-				m_player.col--;
-			//space in location of player
-			//set_location and then put player
+		case SpecialKeys::UP:
+		{
+			if (m_updateBoard.ismovevalid(m_loc, SpecialKeys::UP))
+			{
+				m_loc.row--;
+				m_updateBoard.updatboard(prevLoc, m_loc);
+			}
+			break;
+		}
+		case SpecialKeys::DOWN:
+		{
+			m_loc.row++;
+			m_updateBoard.updatboard(prevLoc, m_loc);
+			break;
+		}
+		case SpecialKeys::RIGHT:
+		{
+			m_loc.col++;
+			m_updateBoard.updatboard(prevLoc, m_loc);
+			break;
+		}
+		case SpecialKeys::LEFT:
+		{
+			m_loc.col--;
+			m_updateBoard.updatboard(prevLoc, m_loc);
+			break;
+		}
 		}
 	}
-	case SpecialKeys::DOWN:
-	{
-
-	}
-	case SpecialKeys::RIGHT:
-	{
-
-	}
-	case SpecialKeys::LEFT:
-	{
-
-	}
-	}
+}
+//----------------------------
+void Player::setLoc(const Location& other)
+{
+	m_loc = other;
 }
