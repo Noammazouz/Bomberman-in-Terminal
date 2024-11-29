@@ -14,7 +14,7 @@ public:
 	Player();
 	const Location& getLoc() const;
 	void setLoc(const Location& other);
-	void move();
+	void move(int step);
 	//bool isMoveGood() const;
 
 private:

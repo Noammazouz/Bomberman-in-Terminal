@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include <conio.h>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -30,19 +31,54 @@ void Controller::startGame()
 //------------------------
 void Controller::runLevel()
 {
-     Location locPlayer = m_board.getLoc('/');
-	while (1)
-	{
-		m_player.move();
-		if (m_board.ismovevalid(locPlayer, SpecialKeys::UP))
-		{
-			m_board.updatboard(locPlayer, m_player.getLoc());
-		}
-		else
-		{
-			m_player.move();
-		}
-	}
+    Location locPlayer = m_board.getLoc('/');
+    bool levelComplete = false;
+
+    while (!levelComplete)
+    {
+        auto step = _getch();
+        if (step == Keys::SPECIAL_KEY)
+        {
+            step = _getch();
+            Location newLoc = locPlayer;
+
+            // Determine new location based on step
+            switch (step)
+            {
+            case SpecialKeys::UP:
+                newLoc.row--;
+                break;
+            case SpecialKeys::DOWN:
+                newLoc.row++;
+                break;
+            case SpecialKeys::LEFT:
+                newLoc.col--;
+                break;
+            case SpecialKeys::RIGHT:
+                newLoc.col++;
+                break;
+            }
+
+            // Check if move is valid
+            if (m_board.ismovevalid(locPlayer, step))
+            {
+                // Update player location
+                m_player.move(step);
+
+                // Update board
+                m_board.updatboard(locPlayer, m_player.getLoc());
+
+                // Update locPlayer for next iteration
+                locPlayer = m_player.getLoc();
+
+                // Add any level completion checks here
+                // For example, check if player reached the door
+                // if (locPlayer == doorLocation) levelComplete = true;
+            }
+        }
+        // Add a way to exit the level or game
+        // For example, ESC key or reaching a specific condition
+    }
 }
 //------------------------
 
