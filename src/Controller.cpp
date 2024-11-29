@@ -3,6 +3,11 @@
 #include <string>
 #include <fstream>
 
+
+/*Controller::Controller()
+{
+}*/
+//----------------
 void Controller::startGame()
 { // to put a while for the level and all the playing
 
@@ -25,9 +30,18 @@ void Controller::startGame()
 //------------------------
 void Controller::runLevel()
 {
+     Location locPlayer = m_board.getLoc('/');
 	while (1)
 	{
 		m_player.move();
+		if (m_board.ismovevalid(locPlayer, SpecialKeys::UP))
+		{
+			m_board.updatboard(locPlayer, m_player.getLoc());
+		}
+		else
+		{
+			m_player.move();
+		}
 	}
 }
 //------------------------

@@ -17,7 +17,6 @@ public:
 	void runLevel();
 	void startGame();
 	//resetlevel()
-	//
 
 private:
 	int m_level = STARTING_LEVEL;

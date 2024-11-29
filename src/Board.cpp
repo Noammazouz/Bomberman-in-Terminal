@@ -29,8 +29,8 @@ int Board::Loading(int currStage)
 	{
 		m_board.push_back(line);
 	}
-	sizeRow = (int)m_board.size()-1;
-	sizeCol = (int)m_board[sizeRow].size()-1;
+	sizeRow = (int)m_board.size() - 1;
+	sizeCol = (int)m_board[sizeRow].size() - 1;
 	return currStage;
 }
 /// ------------
@@ -60,19 +60,16 @@ Location Board::getLoc(char wanted) const
 //--------
 void Board::updatboard(const Location& prevLoc, const Location& newLoc)
 {
-	//std::cout << "I have arrived" << std::endl;
-	//m_board[prevLoc.row][prevLoc.col] = ' ';
-	//m_board[newLoc.row][newLoc.col] = '/';
 	if (prevLoc.row >= 0 && prevLoc.row < m_board.size() &&
 		prevLoc.col >= 0 && prevLoc.col < m_board[prevLoc.row].size())
 	{
-		m_board[prevLoc.row][prevLoc.col] = ' '; // Clear the previous location
+		m_board[prevLoc.row][prevLoc.col] = ' ';
 	}
 
 	if (newLoc.row >= 0 && newLoc.row < m_board.size() &&
 		newLoc.col >= 0 && newLoc.col < m_board[newLoc.row].size())
 	{
-		m_board[newLoc.row][newLoc.col] = '/'; // Update the new location with a character
+		m_board[newLoc.row][newLoc.col] = '/';
 	}
 	Screen::setLocation(prevLoc);
 	std::cout << ' ';
@@ -88,8 +85,7 @@ bool Board::ismovevalid(const Location& loc, int direction) const
 	{
 		case SpecialKeys::UP:
 		{
-			std::cout << m_board.size();
-			if (loc.row > 0 && m_board[loc.row-1][loc.col]!=WALL)
+			if (loc.row > 0 && m_board[loc.row-1][loc.col] != WALL)
 			{
 				return true;
 			}
@@ -97,7 +93,7 @@ bool Board::ismovevalid(const Location& loc, int direction) const
 		}
 		case SpecialKeys::DOWN:
 		{
-			if (loc.row < sizeRow)
+			if (loc.row < sizeRow && m_board[loc.row - 1][loc.col] != WALL)
 			{
 				return true;
 			}
