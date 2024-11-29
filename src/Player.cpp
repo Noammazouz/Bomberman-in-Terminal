@@ -10,7 +10,7 @@ Player::Player()
 {
 }
 
-const Location& Player::getLoc() const
+const Location& Player::getPlayerLoc() const
 {
     return m_loc;
 }
@@ -24,17 +24,17 @@ void Player::move(int step)
 {
     switch (step)
     {
-    case SpecialKeys::UP:
-        m_loc.row--;
-        break;
-    case SpecialKeys::DOWN:
-        m_loc.row++;
-        break;
-    case SpecialKeys::RIGHT:
-        m_loc.col++;
-        break;
-    case SpecialKeys::LEFT:
-        m_loc.col--;
-        break;
+        case SpecialKeys::UP:
+            m_loc.row--;
+            break;
+        case SpecialKeys::DOWN:
+            m_loc.row++;
+            break;
+        case SpecialKeys::RIGHT:
+            m_loc.col++;
+            break;
+        case SpecialKeys::LEFT:
+            m_loc.col--;
+            break;
     }
 }

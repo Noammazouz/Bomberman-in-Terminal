@@ -12,7 +12,7 @@ class Player
 public:
 	Player( const Location& other);
 	Player();
-	const Location& getLoc() const;
+	const Location& getPlayerLoc() const;
 	void setLoc(const Location& other);
 	void move(int step);
 	//bool isMoveGood() const;

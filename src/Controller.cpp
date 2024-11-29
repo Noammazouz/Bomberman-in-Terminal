@@ -66,10 +66,10 @@ void Controller::runLevel()
                 m_player.move(step);
 
                 // Update board
-                m_board.updatboard(locPlayer, m_player.getLoc());
+                m_board.updatboard(locPlayer, m_player.getPlayerLoc());
 
                 // Update locPlayer for next iteration
-                locPlayer = m_player.getLoc();
+                locPlayer = m_player.getPlayerLoc();
 
                 // Add any level completion checks here
                 // For example, check if player reached the door
