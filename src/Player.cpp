@@ -12,7 +12,8 @@ Player::Player()
 	: m_loc({ 0, 0 }) {
 }
 
-const Location& Player::getLoc() const {
+const Location& Player::getLoc() const 
+{
 	return m_loc;
 }
 //----------------------------
