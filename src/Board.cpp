@@ -40,22 +40,27 @@ void Board::print()
         std::cout << temp << std::endl;
 }
 
-Location Board::getLoc(char wanted) const
+Location Board::getLoc(char wanted, const Location& other) const
 {
-    for (int row = 0; row < static_cast<int>(m_board.size()); row++)
+    int col = other.col;
+    for (int row = other.row; row < static_cast<int>(m_board.size()); row++)
     {
-        for (int col = 0; col < static_cast<int>(m_board[row].size()); col++)
+        for (; col < static_cast<int>(m_board[row].size()); col++)
         {
             if (m_board[row][col] == wanted)
             {
                 return Location(row, col);
             }
         }
+        if (col == static_cast<int>(m_board[row].size()))
+        {
+            col = 0;
+        }
     }
-    return Location(-1, -1); // Return invalid location if not found
+    return Location(0, 0); // Return invalid location if not found
 }
 
-void Board::updatboard(const Location& prevLoc, const Location& newLoc)
+void Board::updatboard(const Location& prevLoc, const Location& newLoc, char wanted)
 {
     // Remove player from previous location
     if (prevLoc.row >= 0 && prevLoc.row < static_cast<int>(m_board.size()) &&
@@ -68,14 +73,14 @@ void Board::updatboard(const Location& prevLoc, const Location& newLoc)
     if (newLoc.row >= 0 && newLoc.row < static_cast<int>(m_board.size()) &&
         newLoc.col >= 0 && newLoc.col < static_cast<int>(m_board[newLoc.row].size()))
     {
-        m_board[newLoc.row][newLoc.col] = '/';
+        m_board[newLoc.row][newLoc.col] = wanted;
     }
 
     // Update screen
     Screen::setLocation(prevLoc);
     std::cout << ' ';
     Screen::setLocation(newLoc);
-    std::cout << '/';
+    std::cout << wanted;
 }
 
 bool Board::ismovevalid(const Location& loc, int direction) const
@@ -83,7 +88,7 @@ bool Board::ismovevalid(const Location& loc, int direction) const
     switch (direction)
     {
     case SpecialKeys::UP:
-        return (loc.row > 0 && m_board[loc.row - 1][loc.col] != WALL && m_board[loc.row - 1][loc.col] != ROCK);
+        return (loc.row > 0 && m_board[loc.row - 1][loc.col] != WALL && m_board[loc.row - 1][loc.col] != ROCK && loc.row < m_board.size());
 
     case SpecialKeys::DOWN:
         return (loc.row < sizeRow && m_board[loc.row + 1][loc.col] != WALL && m_board[loc.row + 1][loc.col] != ROCK);

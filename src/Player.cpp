@@ -1,23 +1,31 @@
 #include "Player.h"
 
 Player::Player(const Location& other)
-    : m_loc(other)
+    : m_loc(other),m_startPosPlayer(other)
 {
 }
 
 Player::Player()
-    : m_loc({ 0, 0 }), m_lives(START_LIFE), m_points(0)
+    : m_loc({ 0, 0 }), m_lives(START_LIFE), m_points(0), m_startPosPlayer({ 0, 0 })
 {
 }
 
-const Location& Player::getPlayerLoc() const
+Location Player::getPlayerLoc(int option) const
 {
-    return m_loc;
+    switch (option)
+    {
+    case 0:
+        return m_loc;
+        break;
+    case START_POSTION:
+        return m_startPosPlayer;
+        break;
+    }
 }
 
 void Player::setLoc(const Location& other)
 {
-    m_loc = other;
+   m_loc = m_startPosPlayer = other;
 }
 
 void Player::move(int step)
@@ -37,4 +45,15 @@ void Player::move(int step)
             m_loc.col--;
             break;
     }
+}
+
+//----------------------------
+int Player::getLives() const
+{
+    return m_lives;
+}
+
+void Player::decLives()
+{
+    m_lives--;
 }

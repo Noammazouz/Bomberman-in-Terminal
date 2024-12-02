@@ -12,8 +12,8 @@ public:
 	Board();
 	int Loading(int currStage);
 	void print();
-	Location getLoc(char wanted) const;
-	void updatboard(const Location& prevLoc, const Location& newLoc);
+	Location getLoc(char wanted, const Location& other) const;
+	void updatboard(const Location& prevLoc, const Location& newLoc, char wanted);
 	bool ismovevalid(const Location& loc, int direction) const;
 	int getSizeOfRow() const;
 	int getSizeOfCol() const;
