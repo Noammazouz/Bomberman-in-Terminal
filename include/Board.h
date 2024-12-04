@@ -14,7 +14,7 @@ public:
 	void print();
 	Location getLoc(char wanted, const Location& other) const;
 	void updatboard(const Location& prevLoc, const Location& newLoc, char wanted);
-	bool ismovevalid(const Location& loc, int direction) const;
+	bool ismovevalid(const Location& loc, int direction, int option) const;
 	int getSizeOfRow() const;
 	int getSizeOfCol() const;
 	//int GetCell(Location loc);

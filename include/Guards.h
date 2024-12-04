@@ -9,10 +9,11 @@ class Guards
 public:
 	Guards(const Location& other);
 	Location getGuardLoc(int option) const;
-	void move(int counter);
+	int selectDirection(const Location& other);
 	int getCounter() const;
 	bool isAlive() const;
 	void setLoc(const Location& other);
+	void moveTheGuard(int step);
 
 private:
 	Location m_loc_guard;

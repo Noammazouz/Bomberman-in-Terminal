@@ -83,23 +83,48 @@ void Board::updatboard(const Location& prevLoc, const Location& newLoc, char wan
     std::cout << wanted;
 }
 
-bool Board::ismovevalid(const Location& loc, int direction) const
+bool Board::ismovevalid(const Location& loc, int direction, int option) const
 {
-    switch (direction)
+    if (option == 0)
     {
-    case SpecialKeys::UP:
-        return (loc.row > 0 && m_board[loc.row - 1][loc.col] != WALL && m_board[loc.row - 1][loc.col] != ROCK && loc.row < m_board.size());
+        switch (direction)
+        {
+        case SpecialKeys::UP:
+            return (loc.row > 0 && m_board[loc.row - 1][loc.col] != WALL && m_board[loc.row - 1][loc.col] != ROCK);
 
-    case SpecialKeys::DOWN:
-        return (loc.row < sizeRow && m_board[loc.row + 1][loc.col] != WALL && m_board[loc.row + 1][loc.col] != ROCK);
+        case SpecialKeys::DOWN:
+            return (loc.row < sizeRow && m_board[loc.row + 1][loc.col] != WALL && m_board[loc.row + 1][loc.col] != ROCK);
 
-    case SpecialKeys::RIGHT:
-        return (loc.col < sizeCol && m_board[loc.row][loc.col + 1] != WALL && m_board[loc.row][loc.col + 1] != ROCK);
+        case SpecialKeys::RIGHT:
+            return (loc.col < sizeCol && m_board[loc.row][loc.col + 1] != WALL && m_board[loc.row][loc.col + 1] != ROCK);
 
-    case SpecialKeys::LEFT:
-        return (loc.col > 0 && m_board[loc.row][loc.col - 1] != WALL && m_board[loc.row][loc.col - 1] != ROCK);
+        case SpecialKeys::LEFT:
+            return (loc.col > 0 && m_board[loc.row][loc.col - 1] != WALL && m_board[loc.row][loc.col - 1] != ROCK);
+
+        }
     }
+    else
+    {
+        switch (direction)
+        {
+        case SpecialKeys::UP:
+            return (loc.row > 0 && m_board[loc.row - 1][loc.col] != WALL && m_board[loc.row - 1][loc.col] != ROCK
+                && m_board[loc.row - 1][loc.col] != DOOR);
 
+        case SpecialKeys::DOWN:
+            return (loc.row < sizeRow && m_board[loc.row + 1][loc.col] != WALL && m_board[loc.row + 1][loc.col] != ROCK &&
+                m_board[loc.row + 1][loc.col] != DOOR);
+
+        case SpecialKeys::RIGHT:
+            return (loc.col < sizeCol && m_board[loc.row][loc.col + 1] != WALL && m_board[loc.row][loc.col + 1] != ROCK && 
+                    m_board[loc.row][loc.col + 1] != DOOR);
+
+        case SpecialKeys::LEFT:
+            return (loc.col > 0 && m_board[loc.row][loc.col - 1] != WALL && m_board[loc.row][loc.col - 1] != ROCK &&
+                    m_board[loc.row][loc.col - 1] != DOOR);
+
+        }
+    }
     return false;
 }
 

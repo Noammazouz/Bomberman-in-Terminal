@@ -56,6 +56,7 @@ void Controller::startGame()
 void Controller::runLevel()
 {
   //  std::cout << "leaderboar" << std::endl;
+    Location locDoor = m_board.getLoc(DOOR, Location(0, 0));
     Location locPlayer = m_board.getLoc('/', Location(0, 0));
     bool levelComplete = false;
 
@@ -83,39 +84,55 @@ void Controller::runLevel()
                 newLoc.col++;
                 break;
             }
-
             // Check if move is valid
-            if (m_board.ismovevalid(locPlayer, step))
+
+            if (m_board.ismovevalid(locPlayer, step, 0))
             {
                 // Update player location
                 m_player.move(step);
 
-
-                if (checkHit(locPlayer))
-                {
-                    resetPos(locPlayer);
-                }
-                else
+                if(!guardsVsPlayer(locPlayer))
                 {
                     // Update board
                     m_board.updatboard(locPlayer, m_player.getPlayerLoc(0), '/');
                 }
+               // moveGuards(locPlayer);
                 //checkHit(locPlayer);
-                Screen::setLocation(Location(m_board.getSizeOfRow() + 1, 0)); // where to print leader board
-               std::cout << "lives" << m_player.getLives()<< std::endl;// to put a fucntion that prints the leader board.
-               // std::cout << m_player.getPlayerLoc(0).row << " " << m_player.getPlayerLoc(0).col << std::endl;
+                 // where to print leader board
 
 
-                // Update locPlayer for next iteration
-                locPlayer = m_player.getPlayerLoc(0);
+                 // Update locPlayer for next iteration
+                 locPlayer = m_player.getPlayerLoc(0);
+                    if ((locPlayer.row == locDoor.row) && (locPlayer.col == locDoor.col))
+                    {
+                        levelComplete = true;
+                        break;
+                    }
+                    moveGuards(locPlayer);
                 // Add any level completion checks here
                 // For example, check if player reached the door
-                // if (locPlayer == doorLocation) levelComplete = true;
+           
+                     
             }
         }
+        else if (step == ' ')
+        {
+            moveGuards(locPlayer);
+            if (checkHit(locPlayer))
+            {
+                resetPos(locPlayer);
+            }
+        }
+
         // Add a way to exit the level or game
         // For example, ESC key or reaching a specific condition
+        Screen::setLocation(Location(m_board.getSizeOfRow() + 1, 0));
+        std::cout << "lives" << m_player.getLives() << std::endl;
+        std::cout << "Player loc" << m_player.getPlayerLoc(0).row <<  m_player.getPlayerLoc(0).col<< std::endl;
+        std::cout << "Player loc" << m_player.getPlayerLoc(1).row << m_player.getPlayerLoc(1).col << std::endl;
     }
+
+    //points lives
 }
 //------------------------
 bool Controller::checkHit(const Location& other)
@@ -126,7 +143,6 @@ bool Controller::checkHit(const Location& other)
             && other.col == m_guards[start].getGuardLoc(0).col)
         {
             m_player.decLives();
-            //resetPos(other);
             return true;
         }
     }
@@ -141,8 +157,39 @@ void Controller::resetPos(const Location& other)
     {
         if (m_guards[start].isAlive())
         {
+            m_board.updatboard(m_guards[start].getGuardLoc(0), m_guards[start].getGuardLoc(START_POSTION), '!');
             m_guards[start].setLoc(m_guards[start].getGuardLoc(START_POSTION));
-            m_board.updatboard(m_guards[start].getGuardLoc(0), m_guards[start].getGuardLoc(START_POSTION),'!');
         }
     }
+}
+//-------------------
+void Controller::moveGuards(const Location& player)
+{
+    for (int guard = 0; guard < m_guards.size(); guard++)
+    {
+        if (m_guards[guard].isAlive())
+        {
+            Location currLocGuard = m_guards[guard].getGuardLoc(0);
+            auto direction = m_guards[guard].selectDirection(player);
+            if (m_board.ismovevalid(currLocGuard, direction, 1))
+            {
+                m_guards[guard].moveTheGuard(direction);
+                if (!guardsVsPlayer(player))
+                {
+                    m_board.updatboard(currLocGuard, m_guards[guard].getGuardLoc(0), '!');
+                }
+            }
+
+        }
+    }
+}
+bool Controller::guardsVsPlayer(const Location& player)
+{
+    if (checkHit(m_player.getPlayerLoc(0)))
+    {
+        m_board.updatboard(player, m_player.getPlayerLoc(0), '/');
+        resetPos(player);
+        return true;
+    }
+    return false;
 }

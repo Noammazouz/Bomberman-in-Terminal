@@ -19,6 +19,9 @@ public:
 	void findGuards();
 	bool checkHit(const Location& other);
 	void resetPos(const Location& other);
+	void moveGuards(const Location& other);
+	bool guardsVsPlayer(const Location& player);
+	//bool isDoor(const Location& subect, const Location& door);
 	//resetlevel()
 
 private:

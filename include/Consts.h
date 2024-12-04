@@ -10,3 +10,4 @@ const int ENDING_LEVEL = 25;
 const int KILL_GUARD = 5;
 const char ROCK = '@';
 const char WALL = '#';
+const char DOOR = 'D';
