@@ -29,7 +29,7 @@ int Guards::getCounter() const
 	return m_counter;
 }
 //-----------------
-int Guards::selectDirection(const Location& other)
+int Guards::selectDirection(const Location& other) const
 {
     int yDistance = m_loc_guard.row - other.row;
     int xDistance = m_loc_guard.col - other.col;

@@ -16,6 +16,8 @@ public:
 	int getLives() const;
 	void decLives();
 	void move(int step);
+	void setPoints(int points);
+	int getPoints() const;
 	//bool isMoveGood() const;
 
 private:

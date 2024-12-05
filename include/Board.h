@@ -11,12 +11,13 @@ class Board
 public:
 	Board();
 	int Loading(int currStage);
-	void print();
+	void print() const;
 	Location getLoc(char wanted, const Location& other) const;
 	void updatboard(const Location& prevLoc, const Location& newLoc, char wanted);
 	bool ismovevalid(const Location& loc, int direction, int option) const;
 	int getSizeOfRow() const;
 	int getSizeOfCol() const;
+	void printBomb(const Location& loc, char wanted);
 	//int GetCell(Location loc);
 
 private:

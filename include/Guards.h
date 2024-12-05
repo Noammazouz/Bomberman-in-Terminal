@@ -9,7 +9,7 @@ class Guards
 public:
 	Guards(const Location& other);
 	Location getGuardLoc(int option) const;
-	int selectDirection(const Location& other);
+	int selectDirection(const Location& other) const;
 	int getCounter() const;
 	bool isAlive() const;
 	void setLoc(const Location& other);

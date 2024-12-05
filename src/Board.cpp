@@ -34,7 +34,7 @@ int Board::Loading(int currStage)
     return currStage;
 }
 
-void Board::print()
+void Board::print() const
 {
     for (const auto& temp : m_board)
         std::cout << temp << std::endl;
@@ -66,6 +66,7 @@ void Board::updatboard(const Location& prevLoc, const Location& newLoc, char wan
     if (prevLoc.row >= 0 && prevLoc.row < static_cast<int>(m_board.size()) &&
         prevLoc.col >= 0 && prevLoc.col < static_cast<int>(m_board[prevLoc.row].size()))
     {
+        if(m_board[prevLoc.row][prevLoc.col] != '%')
         m_board[prevLoc.row][prevLoc.col] = ' ';
     }
 
@@ -136,4 +137,14 @@ int Board::getSizeOfRow() const
 int Board::getSizeOfCol() const
 {
     return sizeCol;
+}
+
+void Board::printBomb(const Location& loc, char wanted)
+{
+    if (m_board[loc.row][loc.col] != WALL)
+    {
+        m_board[loc.row][loc.col] = wanted;
+        Screen::setLocation(loc);
+        std::cout << wanted;
+    }
 }
