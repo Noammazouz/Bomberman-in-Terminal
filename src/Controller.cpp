@@ -49,6 +49,7 @@ void Controller::startGame()
 		m_board.print();
 		runLevel();
 
+
 		m_level++;
 	}
 }
@@ -142,6 +143,7 @@ void Controller::runLevel()
     if (levelComplete)
     {
         getPoints(numOfGuards);
+        clearingLevel();
     }
 
     //points lives
@@ -213,8 +215,9 @@ bool Controller::lostGame()
 {
     if (m_player.getLives() == 0)
     {
-        system("cls");
+		clearingLevel();
         std::cout << " fuck you all";
+        //clearingLevel();
         return true;
     }
 
@@ -244,17 +247,21 @@ void Controller::bombsUpdate()
         }
     }
 }
+//------------------------------------
 void Controller::explosion(int cell, char wanted)
 {
-    Location bomb = m_bombs[cell].getBombsLoc();
-    m_board.printBomb(bomb, wanted);
-    //check if there is a player or a guard
-    checkPlayerGuard(wanted);
-    for (int neighbor = 1; neighbor < NEIGHBORSIZE; neighbor++)
+    if (cell >= 0 && cell < static_cast<int>(m_bombs.size()))
     {
-        m_board.printBomb(m_bombs[cell].getNeighbor(bomb, neighbor), wanted);
+        Location bomb = m_bombs[cell].getBombsLoc();
+        m_board.printBomb(bomb, wanted);
         //check if there is a player or a guard
         checkPlayerGuard(wanted);
+        for (int neighbor = 1; neighbor < NEIGHBORSIZE; neighbor++)
+        {
+            m_board.printBomb(m_bombs[cell].getNeighbor(bomb, neighbor), wanted);
+            //check if there is a player or a guard
+            checkPlayerGuard(wanted);
+        }
     }
 }
 //----------------
@@ -295,4 +302,11 @@ void Controller::getPoints(int startGuards)
     points += (startGuards * POINT_FOR_GUARD);
     points += (std::abs(numOfGuards - startGuards) * KILL_GUARD);
     m_player.setPoints(points);
+}
+//-------------------
+void Controller::clearingLevel()
+{
+	m_guards.clear();
+	m_bombs.clear();
+    system("cls");
 }

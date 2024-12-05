@@ -27,6 +27,7 @@ public:
 	void explosion(int cell, char wanted);
 	void checkPlayerGuard(char wanted);
 	void  getPoints( int startGuards);
+	void clearingLevel();
 	//resetlevel()
 
 private:
