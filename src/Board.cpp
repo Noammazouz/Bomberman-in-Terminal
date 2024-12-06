@@ -139,12 +139,25 @@ int Board::getSizeOfCol() const
     return sizeCol;
 }
 
-void Board::printBomb(const Location& loc, char wanted)
+void Board::printBomb(const Location& loc, char wanted, int select)
 {
-    if (m_board[loc.row][loc.col] != WALL)
+    switch(select)
     {
-        m_board[loc.row][loc.col] = wanted;
-        Screen::setLocation(loc);
-        std::cout << wanted;
+    case 0:
+        if (m_board[loc.row][loc.col] != WALL && m_board[loc.row][loc.col] != '%' && m_board[loc.row][loc.col] != '!')
+		{
+			m_board[loc.row][loc.col] = wanted;
+			Screen::setLocation(loc);
+			std::cout << wanted;
+		}
+		break;
+	case 1:
+		if (m_board[loc.row][loc.col] != WALL)
+		{
+			m_board[loc.row][loc.col] = wanted;
+			Screen::setLocation(loc);
+			std::cout << wanted;
+		}
+		break;
     }
 }

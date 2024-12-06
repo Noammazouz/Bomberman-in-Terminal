@@ -17,7 +17,7 @@ public:
 	bool ismovevalid(const Location& loc, int direction, int option) const;
 	int getSizeOfRow() const;
 	int getSizeOfCol() const;
-	void printBomb(const Location& loc, char wanted);
+	void printBomb(const Location& loc, char wanted, int select);
 	//int GetCell(Location loc);
 
 private:

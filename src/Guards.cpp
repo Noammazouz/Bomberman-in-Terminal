@@ -88,3 +88,8 @@ void Guards::setLoc(const Location& other)
 {
     m_loc_guard = other;
 }
+//-------------------
+void Guards::setAlive(bool alive)
+{
+    m_alive = alive;
+}

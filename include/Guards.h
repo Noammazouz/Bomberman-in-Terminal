@@ -12,6 +12,7 @@ public:
 	int selectDirection(const Location& other) const;
 	int getCounter() const;
 	bool isAlive() const;
+	void setAlive(bool alive);
 	void setLoc(const Location& other);
 	void moveTheGuard(int step);
 
