@@ -72,20 +72,7 @@ void Controller::runLevel()
             // Check if move is valid
             if (m_board.isMoveValid(locPlayer, step, 0))
             {
-                Screen::setLocation(locPlayer);
-                /*for (int start = 0; start < m_bombs.size(); start++)
-                {
-                    if (m_bombs[start].getBombsLoc().row == locPlayer.row && m_bombs[start].getBombsLoc().col == locPlayer.col)
-                    {
-                        std::cout << '%';
-                        break;
-                    }
-                    else
-                    {
-                        std::cout << ' ';
-                        break;
-                    }
-                }*/
+                Screen::setLocation(locPlayer); 
                 std::cout << ' ';
                 // Update player location
                 m_player.move(step);
@@ -113,9 +100,7 @@ void Controller::runLevel()
                 {
                     m_nextLavel = false;
                     break;
-                }
-                // Add any level completion checks here
-                // For example, check if player reached the door      
+                }   
             }
         }
         else if (step == ' ')
@@ -136,8 +121,6 @@ void Controller::runLevel()
             bombsUpdate();
         }
         m_board.printLeaderBoard(m_level, m_player.getLives(), m_player.getPoints());
-        // Add a way to exit the level or game
-        // For example, ESC key or reaching a specific condition
     }
     if (levelComplete)
     {
@@ -145,7 +128,6 @@ void Controller::runLevel()
         clearingLevel();
     }
 
-    //points lives
 }
 //------------------------
 bool Controller::checkHit(const Location& other)
@@ -177,6 +159,10 @@ void Controller::resetPos(const Location& playerloc)
     for (int start = 0; start < static_cast<int> (m_bombs.size()); start++)
     {
         m_board.printBomb(m_bombs[start].getBombsLoc(), ' ', 1);
+		for (int neighbor = 1; neighbor < NEIGHBORSIZE; neighbor++)
+		{
+			m_board.printBomb(m_bombs[start].getNeighbor(m_bombs[start].getBombsLoc(), neighbor), ' ', 1);
+		}
     }
     m_bombs.clear();
 }
@@ -259,12 +245,15 @@ void Controller::explosion(int cell, char wanted)
         Location bomb = m_bombs[cell].getBombsLoc();
         m_board.printBomb(bomb, wanted, 1);
         //check if there is a player or a guard
-          checkPlayerGuard(wanted);
-        for (int neighbor = 1; neighbor < NEIGHBORSIZE; neighbor++)
+        checkPlayerGuard(wanted);
+        if (!m_bombs.empty())
         {
-            m_board.printBomb(m_bombs[cell].getNeighbor(bomb, neighbor), wanted, 1);
-            //check if there is a player or a guard
-            checkPlayerGuard(wanted);
+            for (int neighbor = 1; neighbor < NEIGHBORSIZE; neighbor++)
+            {
+                m_board.printBomb(m_bombs[cell].getNeighbor(bomb, neighbor), wanted, 1);
+                //check if there is a player or a guard
+                checkPlayerGuard(wanted);
+            }
         }
     }
 }
@@ -281,24 +270,34 @@ void Controller::checkPlayerGuard(char wanted)
             for (int guard = static_cast<int> (m_guards.size()) - 1; guard > -1; guard--)
             {
                 Location guardLoc = m_guards[guard].getGuardLoc(0);
-                if ((temp.col == guardLoc.col) && (temp.row == guardLoc.row))
-                {
-                    m_board.updateBoard(guardLoc, guardLoc, ' ');
-                    m_guards[guard].setAlive(false);
-                    m_guards.erase(m_guards.begin() + guard);
-                }
+				for (int neighbor = 1; neighbor < NEIGHBORSIZE; neighbor++)
+				{
+                    Location tempNeighbor = m_bombs[bomb].getNeighbor(temp, neighbor);
+					if (((temp.col == guardLoc.col) && (temp.row == guardLoc.row))
+						|| ((tempNeighbor.col == guardLoc.col) && (tempNeighbor.row == guardLoc.row)))
+					{
+						m_board.updateBoard(guardLoc, guardLoc, ' ');
+						m_guards[guard].setAlive(false);
+						m_guards.erase(m_guards.begin() + guard);
+                        break;
+					}
+				}
             }
         }
 
         for (int bomb = 0; bomb < static_cast<int> (m_bombs.size()); bomb++)
         {
             Location temp = m_bombs[bomb].getBombsLoc();
-            if ((temp.col == playerLoc.col) && (temp.row == playerLoc.row))
-            {
-                //resetPos(playerLoc);
-                playerHitByBomb = true;
-                return;
-            }
+            for (int neighbor = 1; neighbor < NEIGHBORSIZE; neighbor++)
+			{
+                Location tempNeighbor = m_bombs[bomb].getNeighbor(temp, neighbor);
+				if (((temp.col == playerLoc.col) && (temp.row == playerLoc.row)) || 
+                    ((tempNeighbor.col == playerLoc.col) && (tempNeighbor.row == playerLoc.row)))
+				{
+					playerHitByBomb = true;
+					break;
+				}
+			}
         }
         if (playerHitByBomb)
         {

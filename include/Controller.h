@@ -28,7 +28,6 @@ public:
 	void checkPlayerGuard(char wanted);
 	void  getPoints( int startGuards);
 	void clearingLevel();
-	//resetlevel()
 
 private:
 	int m_level = STARTING_LEVEL;
