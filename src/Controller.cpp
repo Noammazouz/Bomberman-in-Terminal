@@ -61,7 +61,7 @@ void Controller::runLevel()
     Location locPlayer = m_board.getLoc('/', Location(0, 0));
     bool levelComplete = false;
     int numOfGuards = static_cast<int> (m_guards.size());
-
+    m_board.printLeaderBoard(m_level, m_player.getLives(), m_player.getPoints());
 
     while (!levelComplete)
     {
@@ -70,7 +70,7 @@ void Controller::runLevel()
         {
             step = _getch();
             // Check if move is valid
-            if (m_board.ismovevalid(locPlayer, step, 0))
+            if (m_board.isMoveValid(locPlayer, step, 0))
             {
                 Screen::setLocation(locPlayer);
                 /*for (int start = 0; start < m_bombs.size(); start++)
@@ -93,7 +93,7 @@ void Controller::runLevel()
                 if(!guardsVsPlayer(m_player.getPlayerLoc(0)))
                 {
                     // Update board
-                    m_board.updatboard(locPlayer, m_player.getPlayerLoc(0), '/');
+                    m_board.updateBoard(locPlayer, m_player.getPlayerLoc(0), '/');
                 }
                 if (lostGame())
                 {
@@ -135,8 +135,7 @@ void Controller::runLevel()
         {
             bombsUpdate();
         }
-        Screen::setLocation(Location(m_board.getSizeOfRow() + 1, 0));
-        std::cout << "lives" << m_player.getLives() << std::endl;
+        m_board.printLeaderBoard(m_level, m_player.getLives(), m_player.getPoints());
         // Add a way to exit the level or game
         // For example, ESC key or reaching a specific condition
     }
@@ -165,13 +164,13 @@ bool Controller::checkHit(const Location& other)
 //-------------------------
 void Controller::resetPos(const Location& playerloc)
 {
-    m_board.updatboard(playerloc, m_player.getPlayerLoc(START_POSTION), '/');
+    m_board.updateBoard(playerloc, m_player.getPlayerLoc(START_POSTION), '/');
     m_player.setLoc(m_player.getPlayerLoc(START_POSTION));
     for (int start = 0; start < m_guards.size(); start++)
     {
         if (m_guards[start].isAlive())
         {
-            m_board.updatboard(m_guards[start].getGuardLoc(0), m_guards[start].getGuardLoc(START_POSTION), '!');
+            m_board.updateBoard(m_guards[start].getGuardLoc(0), m_guards[start].getGuardLoc(START_POSTION), '!');
             m_guards[start].setLoc(m_guards[start].getGuardLoc(START_POSTION));
         }
     }
@@ -190,10 +189,10 @@ void Controller::moveGuards(const Location& player)
         {
             Location currLocGuard = m_guards[guard].getGuardLoc(0);
             auto direction = m_guards[guard].selectDirection(player);
-            if (m_board.ismovevalid(currLocGuard, direction, 1))
+            if (m_board.isMoveValid(currLocGuard, direction, 1))
             {
                 m_guards[guard].moveTheGuard(direction);
-                m_board.updatboard(currLocGuard, m_guards[guard].getGuardLoc(0), '!');
+                m_board.updateBoard(currLocGuard, m_guards[guard].getGuardLoc(0), '!');
                 guardsVsPlayer(player);
             }
 
@@ -205,7 +204,7 @@ bool Controller::guardsVsPlayer(const Location& player)
 {
     if (checkHit(m_player.getPlayerLoc(0)))
     {
-        m_board.updatboard(player, m_player.getPlayerLoc(0), '/');
+        m_board.updateBoard(player, m_player.getPlayerLoc(0), '/');
 
         resetPos(player);
         return true;
@@ -284,15 +283,9 @@ void Controller::checkPlayerGuard(char wanted)
                 Location guardLoc = m_guards[guard].getGuardLoc(0);
                 if ((temp.col == guardLoc.col) && (temp.row == guardLoc.row))
                 {
-                    // Remove the guard from the board
-                    //m_board.updatboard(guardLoc, guardLoc, ' ');
-
-                    // Remove the guard from the guards vector
-                    //m_guards.erase(m_guards.begin() + guard);
+                    m_board.updateBoard(guardLoc, guardLoc, ' ');
                     m_guards[guard].setAlive(false);
-                    m_board.updatboard(guardLoc, guardLoc, ' ');
                     m_guards.erase(m_guards.begin() + guard);
-					//m_board.printBomb(guardLoc, ' ');
                 }
             }
         }

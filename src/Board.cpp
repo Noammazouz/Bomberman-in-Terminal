@@ -60,14 +60,17 @@ Location Board::getLoc(char wanted, const Location& other) const
     return Location(0, 0); // Return invalid location if not found
 }
 
-void Board::updatboard(const Location& prevLoc, const Location& newLoc, char wanted)
+void Board::updateBoard(const Location& prevLoc, const Location& newLoc, char wanted)
 {
     // Remove player from previous location
     if (prevLoc.row >= 0 && prevLoc.row < static_cast<int>(m_board.size()) &&
         prevLoc.col >= 0 && prevLoc.col < static_cast<int>(m_board[prevLoc.row].size()))
     {
-        if(m_board[prevLoc.row][prevLoc.col] != '%')
-        m_board[prevLoc.row][prevLoc.col] = ' ';
+        if (m_board[prevLoc.row][prevLoc.col] != '4' && m_board[prevLoc.row][prevLoc.col] != '3' &&
+            m_board[prevLoc.row][prevLoc.col] != '2' && m_board[prevLoc.row][prevLoc.col] != '1')
+        {
+            m_board[prevLoc.row][prevLoc.col] = ' ';
+        }
     }
 
     // Place player at new location
@@ -84,7 +87,7 @@ void Board::updatboard(const Location& prevLoc, const Location& newLoc, char wan
     std::cout << wanted;
 }
 
-bool Board::ismovevalid(const Location& loc, int direction, int option) const
+bool Board::isMoveValid(const Location& loc, int direction, int option) const
 {
     if (option == 0)
     {
@@ -160,4 +163,10 @@ void Board::printBomb(const Location& loc, char wanted, int select)
 		}
 		break;
     }
+}
+//----------------------
+void Board::printLeaderBoard(int level, int lives, int points)
+{
+    Screen::setLocation(Location(sizeRow + 1, 0));
+    std::cout << "Level: " << level << " Lives: " << lives << " Points: " << points << std::endl;
 }
