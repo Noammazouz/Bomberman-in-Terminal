@@ -217,8 +217,7 @@ bool Controller::lostGame()
     if (m_player.getLives() == 0)
     {
 		clearingLevel();
-        std::cout << " fuck you all";
-        //clearingLevel();
+		std::cout << "Game Over" << std::endl;
         return true;
     }
 
