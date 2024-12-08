@@ -65,6 +65,7 @@ void Controller::runLevel()
 
     while (!levelComplete)
     {
+        
         auto step = _getch();
         if (step == Keys::SPECIAL_KEY)
         {
@@ -72,7 +73,7 @@ void Controller::runLevel()
             // Check if move is valid
             if (m_board.isMoveValid(locPlayer, step, 0))
             {
-                Screen::setLocation(locPlayer); 
+                Screen::setLocation(m_player.getPlayerLoc(1));
                 std::cout << ' ';
                 // Update player location
                 m_player.move(step);
@@ -145,9 +146,8 @@ bool Controller::checkHit(const Location& other)
 }
 //-------------------------
 void Controller::resetPos(const Location& playerloc)
-{
-    m_board.updateBoard(playerloc, m_player.getPlayerLoc(START_POSTION), '/');
-    m_player.setLoc(m_player.getPlayerLoc(START_POSTION));
+ {
+    
     for (int start = 0; start < m_guards.size(); start++)
     {
         if (m_guards[start].isAlive())
@@ -165,6 +165,8 @@ void Controller::resetPos(const Location& playerloc)
 		}
     }
     m_bombs.clear();
+    m_board.updateBoard(playerloc, m_player.getPlayerLoc(START_POSTION), '/');
+    m_player.setLoc(m_player.getPlayerLoc(START_POSTION));
 }
 //-------------------
 void Controller::moveGuards(const Location& player)
@@ -218,22 +220,22 @@ void  Controller::setAbomb(const Location& player)
 //--------------------------------------
 void Controller::bombsUpdate()
 {
-    for (int bomb = static_cast<int> (m_bombs.size()) - 1; bomb > -1 ; bomb--)
+    for (int bomb = static_cast<int> (m_bombs.size()) - 1; bomb > -1; bomb--)
     {
-        m_bombs[bomb].decTimer();
         int timer = m_bombs[bomb].getTimer();
+        m_bombs[bomb].decTimer();
+        if (timer > 0)
+        {
+            m_board.printBomb(m_bombs[bomb].getBombsLoc(), static_cast<char> (timer + '0'), 0);
+        }
         if (timer == 0)
         {
             explosion(bomb, '*');
         }
-        else if (timer < 0)
+        if (timer < 0)
         {
             explosion(bomb, ' ');
             m_bombs.erase(m_bombs.begin() + bomb);
-        }
-        else
-        {
-            m_board.printBomb(m_bombs[bomb].getBombsLoc(), static_cast<char> (timer + '0'), 0);
         }
     }
 }
@@ -301,6 +303,7 @@ void Controller::checkPlayerGuard(char wanted)
         }
         if (playerHitByBomb)
         {
+            m_player.decLives();
             resetPos(playerLoc);
         }
     }
